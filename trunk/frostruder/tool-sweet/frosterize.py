@@ -136,12 +136,12 @@ class Frosterizer:
 	def generate(self):
 		"Generate the actual GCode"
 		
-		print "(Frosterized version of %s)" % (self.file)
-		print "(Size: %.2fmm x %.2fmm / %.2f PBI [Peanut Butter Inch])" % (self.width, self.height, self.pbi)
-		print "(Call:", " ".join(sys.argv), ")"
-		print "G21 (metric ftw)"
-		print "G90 (absolute mode)"
-		print "G92 X0 Y0 Z0 (zero all axes)"
+		print ";(Frosterized version of %s)" % (self.file)
+		print ";(Size: %.2fmm x %.2fmm / %.2f PBI [Peanut Butter Inch])" % (self.width, self.height, self.pbi)
+		print ";(Call:", " ".join(sys.argv), ")"
+		print "G21 ;(metric ftw)"
+		print "G90 ;(absolute mode)"
+		print "G92 X0 Y0 Z0 ;(zero all axes)"
 		self.go_to_point(0, 0, self.z_height, self.z_feedrate)
 		print
 	
@@ -151,19 +151,19 @@ class Frosterizer:
 			min_y = self.y_pixel_to_point(self.image.size[1])
 			max_y = self.y_pixel_to_point(-1)
 
-			print "(border outline)"
+			print ";(border outline)"
 			self.go_to_point(min_x, max_y, self.z_height, self.xy_feedrate)
-			print "M106 (pressure on)"
-			print "G4 P%d (wait %dms)" % (self.start_delay, self.start_delay)
+			print "M106 ;(pressure on)"
+			print "G4 P%d ;(wait %dms)" % (self.start_delay, self.start_delay)
 			self.go_to_point(max_x, max_y, self.z_height, self.xy_feedrate)
 			self.go_to_point(max_x, min_y, self.z_height, self.xy_feedrate)
 			self.go_to_point(min_x, min_y, self.z_height, self.xy_feedrate)
 			self.go_to_point(min_x, max_y - self.stop_distance, self.z_height, self.xy_feedrate)
-			print "M107 (pressure off)"
-			print "M126 (relief valve open)"
+			print "M107 ;(pressure off)"
+			print "M126 ;(relief valve open)"
 			self.go_to_point(min_x, max_y, self.z_height, self.xy_feedrate)
-			print "G4 P%d (wait %dms)" % (self.stop_delay, self.stop_delay)
-			print "M127 (relief valve close)"
+			print "G4 P%d ;(wait %dms)" % (self.stop_delay, self.stop_delay)
+			print "M127 ;(relief valve close)"
 			print
 		
 		for y in range(self.image.size[1]):
@@ -184,47 +184,47 @@ class Frosterizer:
 						actual_start = self.x_pixel_to_point(start)
 						actual_end = self.x_pixel_to_point(end)
 
-						print "(line from %.2f to %.2f at %.2f)" % (actual_start, actual_end, actual_y)
+						print ";(line from %.2f to %.2f at %.2f)" % (actual_start, actual_end, actual_y)
 						self.go_to_point(actual_start, actual_y, self.z_height, self.xy_feedrate)
-						print "M106 (pressure on)"
-						print "G4 P%d (wait %dms)" % (self.start_delay, self.start_delay)
+						print "M106 ;(pressure on)"
+						print "G4 P%d ;(wait %dms)" % (self.start_delay, self.start_delay)
 						
 						if (abs(actual_end - actual_start) > self.stop_distance):
 							self.go_to_point(actual_end-self.stop_distance, actual_y, self.z_height, self.xy_feedrate)
-							print "M107 (pressure off)"
-							print "M126 (relief valve open)"
+							print "M107 ;(pressure off)"
+							print "M126 ;(relief valve open)"
 							self.go_to_point(actual_end, actual_y, self.z_height, self.xy_feedrate)
 						else:
 							self.go_to_point(actual_end, actual_y, self.z_height, self.xy_feedrate)
-							print "M107 (pressure off)"
-							print "M126 (relief valve open)"
+							print "M107 ;(pressure off)"
+							print "M126 ;(relief valve open)"
 
-						print "G4 P%d (wait %dms)" % (self.stop_delay, self.stop_delay)
-						print "M127 (relief valve close)"
+						print "G4 P%d ;(wait %dms)" % (self.stop_delay, self.stop_delay)
+						print "M127 ;(relief valve close)"
 						print
 
 						x = end
 					else:
 						actual_x = self.x_pixel_to_point(x)
 						
-						print "(dot at %.2f, %.2f)" % (actual_x, actual_y)
+						print ";(dot at %.2f, %.2f)" % (actual_x, actual_y)
 						self.go_to_point(actual_x, actual_y, self.z_height, self.xy_feedrate)
-						print "M106 (pressure on)"
-						print "G4 P%d (wait %dms)" % (self.dot_delay, self.dot_delay)
-						print "M107 (pressure off)"
-						print "M126 (relief valve open)"
-						print "G4 P%d (wait %dms)" % (self.stop_delay, self.stop_delay)
-						print "M127 (relief valve close)"
+						print "M106 ;(pressure on)"
+						print "G4 P%d ;(wait %dms)" % (self.dot_delay, self.dot_delay)
+						print "M107 ;(pressure off)"
+						print "M126 ;(relief valve open)"
+						print "G4 P%d ;(wait %dms)" % (self.stop_delay, self.stop_delay)
+						print "M127 ;(relief valve close)"
 						print
 				x = x+1
 
 		print
-		print "(end of print job)"
+		print ";(end of print job)"
 		print "M107"
 		print "M126"
 		self.go_to_point(self.current_x, self.current_y, 15, self.xy_feedrate)
 		self.go_to_point(0, 0, 15, self.xy_feedrate)
-		print "M18 (drives off)"
+		print "M18 ;(drives off)"
 		print "M127"
 		
 	def go_to_point(self, x, y, z, feedrate):

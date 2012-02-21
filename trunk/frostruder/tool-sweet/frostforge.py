@@ -53,20 +53,20 @@ class Frostforge:
 	def generate(self):
 		"Generate the actual GCode"
 		
-		self.tmp_file.write("(Frosterized version of %s)\n" % (self.file_path))
-		foo = "(Call:" + " ".join(sys.argv) + ")\n\n"
+		self.tmp_file.write(";(Frosterized version of %s)\n" % (self.file_path))
+		foo = ";(Call:" + " ".join(sys.argv) + ")\n\n"
 		self.tmp_file.write(foo)
 
 		for line in self.orig_file:
 			if re.search("M101", line):
-				self.tmp_file.write("M106 (pressure on)\n")
-				self.tmp_file.write("G4 P%d (wait for startup)\n" % (self.start_delay))
+				self.tmp_file.write("M106 ;(pressure on)\n")
+				self.tmp_file.write("G4 P%d ;(wait for startup)\n" % (self.start_delay))
 				continue
 			if re.search("M103", line):
-				self.tmp_file.write("M107 (pressure off)\n")
-				self.tmp_file.write("M126 (relief open)\n")
-				self.tmp_file.write("G4 P%d (wait for pressure drop)\n" % (self.stop_delay))
-				self.tmp_file.write("M127 (relief close)\n")
+				self.tmp_file.write("M107 ;(pressure off)\n")
+				self.tmp_file.write("M126 ;(relief open)\n")
+				self.tmp_file.write("G4 P%d ;(wait for pressure drop)\n" % (self.stop_delay))
+				self.tmp_file.write("M127 ;(relief close)\n")
 				continue
 			if re.search("M104", line):
 				continue		

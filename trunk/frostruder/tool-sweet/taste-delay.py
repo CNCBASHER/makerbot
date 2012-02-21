@@ -67,19 +67,19 @@ class TasteDelay:
 
 	def generate(self):
 		"Generate the actual GCode"
-		print "(", " ".join(sys.argv), ")"
-		print "(After you run the script, use the reference below to determine delays.)"
-		print "(Starting from the top, the dot lines were printed at the following delays:)"
+		print ";(", " ".join(sys.argv), ")"
+		print ";(After you run the script, use the reference below to determine delays.)"
+		print ";(Starting from the top, the dot lines were printed at the following delays:)"
 		
 		for i in range(self.rows):
 			line = i+1
-			print "(#%d - %d milliseconds)" % (line, self.getDelay(i))
+			print ";(#%d - %d milliseconds)" % (line, self.getDelay(i))
 
 		print
 
-		print "G21 (metric ftw)"
-		print "G90 (absolute mode)"
-		print "G92 X0 Y0 Z0 (zero all axes)"
+		print "G21 ;(metric ftw)"
+		print "G90 ;(absolute mode)"
+		print "G92 X0 Y0 Z0 ;(zero all axes)"
 		self.go_to_point(0, 0, self.start_height, self.z_feedrate)
 		print	
 	
@@ -92,24 +92,24 @@ class TasteDelay:
 
 				x_end = x_start + self.line_length
 
-				print "(dot at %.2f, %.2f)" % (x_start, y_point)
+				print ";(dot at %.2f, %.2f)" % (x_start, y_point)
 				self.go_to_point(x_start, y_point, self.start_height, self.xy_feedrate)
-				print("M106 (pressure on)")
-				print("G4 P%d (wait %d ms)") % (dot_delay, dot_delay)
+				print("M106 ;(pressure on)")
+				print("G4 P%d ;(wait %d ms)") % (dot_delay, dot_delay)
 				self.go_to_point(x_end, y_point, self.start_height, self.xy_feedrate)
-				print("M107 (pressure off)");
-				print("M126 (relief valve open)")
-				print("G4 P%d (wait %d ms)") % (self.stop_delay, self.stop_delay)
-				print("M127 (relief valve close)")
+				print("M107 ;(pressure off)");
+				print("M126 ;(relief valve open)")
+				print("G4 P%d ;(wait %d ms)") % (self.stop_delay, self.stop_delay)
+				print("M127 ;(relief valve close)")
 				print("");
 								
 				x_start = x_end + self.spacing
 
-		print "M107 (pressure off)"
-		print "M126 (relief open)"
+		print "M107 ;(pressure off)"
+		print "M126 ;(relief open)"
 		self.go_to_point(self.current_x, self.current_y, 10, self.z_feedrate)
 		self.go_to_point(0, 0, 25, self.xy_feedrate)
-		print "M18 (drives off)"
+		print "M18 ;(drives off)"
 		print "M127"
 		
 	def go_to_point(self, x, y, z, feedrate):

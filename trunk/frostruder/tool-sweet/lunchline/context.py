@@ -18,35 +18,35 @@ class GCodeContext:
 	self.codes = []
 
     def generate(self):
-	print "(Lunchlined version of %s @ %.2f)" % (self.file, self.xy_feedrate)
-	print "(", " ".join(sys.argv), ")"
-	print "G21 (metric ftw)"
-	print "G90 (absolute mode)"
-	print "G92 X0 Y0 Z0 (zero all axes)"
-	print "G92 Z%.2f F%.2f (go up to printing level)" % (self.z_height, self.z_feedrate)
+	print ";(Lunchlined version of %s @ %.2f)" % (self.file, self.xy_feedrate)
+	print ";(", " ".join(sys.argv), ")"
+	print "G21 ;(metric ftw)"
+	print "G90 ;(absolute mode)"
+	print "G92 X0 Y0 Z0 ;(zero all axes)"
+	print "G92 Z%.2f F%.2f ;(go up to printing level)" % (self.z_height, self.z_feedrate)
 	print
 
 	for line in self.codes:
 		print line
 	
 	print
-	print "(end of print job)"
+	print ";(end of print job)"
 	print "M107"
 	print "M126"
-	print "G92 Z15 F%.2f (go up to finished level)" % (self.z_feedrate)
-	print "G92 X0 Y0 Z15 F%.2f (go up to finished level)" % (self.z_feedrate)
-	print "M18 (drives off)"
+	print "G92 Z15 F%.2f ;(go up to finished level)" % (self.z_feedrate)
+	print "G92 X0 Y0 Z15 F%.2f ;(go up to finished level)" % (self.z_feedrate)
+	print "M18 ;(drives off)"
 	print "M127"
 
     def start(self):
-		self.codes.append("M106 (pressure on)")
-		self.codes.append("G4 P%d (wait %dms)" % (self.start_delay, self.start_delay))
+		self.codes.append("M106 ;(pressure on)")
+		self.codes.append("G4 P%d ;(wait %dms)" % (self.start_delay, self.start_delay))
 
     def stop(self):
-		self.codes.append("M107 (pressure off)")
-		self.codes.append("M126 (relief valve open)")
-		self.codes.append("G4 P%d (wait %dms)" % (self.stop_delay, self.stop_delay))
-		self.codes.append("M127 (relief valve close)")
+		self.codes.append("M107 ;(pressure off)")
+		self.codes.append("M126 ;(relief valve open)")
+		self.codes.append("G4 P%d ;(wait %dms)" % (self.stop_delay, self.stop_delay))
+		self.codes.append("M127 ;(relief valve close)")
 
     def go_to_point(self, x, y, stop=False):
         if self.last == (x,y):
@@ -70,15 +70,15 @@ class GCodeContext:
 				y_pre = self.last[1] - y*pre_ratio
 
 			self.codes.append("G1 X%.2f Y%.2f F%.2f" % (x_pre, y_pre, self.xy_feedrate))
-			self.codes.append("M107 (pressure off)")
-			self.codes.append("M126 (relief valve open)")
+			self.codes.append("M107 ;(pressure off)")
+			self.codes.append("M126 ;(relief valve open)")
 			self.codes.append("G1 X%.2f Y%.2f F%.2f" % (x, y, self.xy_feedrate))
 		else:
 			self.codes.append("G1 X%.2f Y%.2f F%.2f" % (x, y, self.xy_feedrate))
-			self.codes.append("M107 (pressure off)")
-			self.codes.append("M126 (relief valve open)")
-		self.codes.append("G4 P%d (wait %dms)" % (self.stop_delay, self.stop_delay))
-		self.codes.append("M127 (relief valve close)")
+			self.codes.append("M107 ;(pressure off)")
+			self.codes.append("M126 ;(relief valve open)")
+		self.codes.append("G4 P%d ;(wait %dms)" % (self.stop_delay, self.stop_delay))
+		self.codes.append("M127 ;(relief valve close)")
 		self.codes.append("")
             	self.drawing = False
         else:

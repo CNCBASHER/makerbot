@@ -68,18 +68,18 @@ class TasteOoze:
 
 	def generate(self):
 		"Generate the actual GCode"
-		print "(", " ".join(sys.argv), ")"
-		print "(After you run the script, use the reference below to determine optimum turnoff distance.)"
-		print "(Starting from the top, the lines were printed at the following turnoff distances:)"
+		print ";(", " ".join(sys.argv), ")"
+		print ";(After you run the script, use the reference below to determine optimum turnoff distance.)"
+		print ";(Starting from the top, the lines were printed at the following turnoff distances:)"
 		
 		for i in range(self.rows):
 			line = i+1
-			print "(#%d - %.2fmm / %.2f ms)" % (line, self.getTurnoffDistance(i), self.getTurnoffMillis(i))
+			print ";(#%d - %.2fmm / %.2f ms)" % (line, self.getTurnoffDistance(i), self.getTurnoffMillis(i))
 
 		print
-		print "G21 (metric ftw)"
-		print "G90 (absolute mode)"
-		print "G92 X0 Y0 Z0 (zero all axes)"
+		print "G21 ;(metric ftw)"
+		print "G90 ;(absolute mode)"
+		print "G92 X0 Y0 Z0 ;(zero all axes)"
 		self.go_to_point(0, 0, self.start_height, self.z_feedrate)
 		print
 		
@@ -90,24 +90,24 @@ class TasteOoze:
 			y_point = self.width/2 - (self.spacing * i)
 			next_y =  self.width/2 - (self.spacing * (i+1))
 			
-			print "(line from %.2f to %.2f at %.2f)" % (x_start, x_end, self.xy_feedrate)
+			print ";(line from %.2f to %.2f at %.2f)" % (x_start, x_end, self.xy_feedrate)
 			self.go_to_point(x_start, y_point, self.start_height, self.xy_feedrate)
-			print("M106 (pressure on)")
-			print("G4 P%d (wait %d ms)") % (self.start_delay, self.start_delay)
+			print("M106 ;(pressure on)")
+			print("G4 P%d ;(wait %d ms)") % (self.start_delay, self.start_delay)
 			self.go_to_point(x_turnoff, y_point, self.start_height, self.xy_feedrate)
-			print("M107 (pressure off)");
-			print("M126 (relief valve open)")
+			print("M107 ;(pressure off)");
+			print("M126 ;(relief valve open)")
 			self.go_to_point(x_end, y_point, self.start_height, self.xy_feedrate)
-			print("G4 P%d (wait %d ms)") % (self.stop_delay, self.stop_delay)
-			print("M127 (relief valve close)")
+			print("G4 P%d ;(wait %d ms)") % (self.stop_delay, self.stop_delay)
+			print("M127 ;(relief valve close)")
 			self.go_to_point(x_end, next_y, self.start_height, self.xy_feedrate)
 			print("");
 
-		print "M107 (pressure off)"
-		print "M126 (relief open)"
+		print "M107 ;(pressure off)"
+		print "M126 ;(relief open)"
 		self.go_to_point(self.current_x, self.current_y, 10, self.z_feedrate)
 		self.go_to_point(0, 0, 25, self.xy_feedrate)
-		print "M18 (drives off)"
+		print "M18 ;(drives off)"
 		print "M127"
 		
 	def go_to_point(self, x, y, z, feedrate):
